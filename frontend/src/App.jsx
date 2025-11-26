@@ -1,9 +1,20 @@
 import React from 'react'
+import Register from './components/Register'
+
+import {BrowserRouter as Router,Routes,Route} from "react-router-dom"
+import LandingPage from './components/LandingPage';
+import Login from './components/Login';
 
 function App() {
   return (
-    <div><h1>Note App</h1></div>
-  )
+    <Router>
+      <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App

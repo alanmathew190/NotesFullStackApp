@@ -1,6 +1,8 @@
 import { useState } from "react";
 import logo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../api/Axiosinstance";
+import toast from "react-hot-toast"
 
 
 function Register() {
@@ -8,9 +10,19 @@ function Register() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log("Form submitted:", { username, password });
+    try {
+      const response = await axiosInstance.post("/register/", {
+        username,
+        password
+      });
+      toast.success(response.data.message || "Registration Successfull")
+      navigate("/login")
+    } catch (error) {
+      console.error(error)
+      toast.error(error.response?.data?.message||"Registration failed")
+    }
   };
 
   return (

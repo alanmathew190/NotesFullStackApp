@@ -1,6 +1,6 @@
 import { useState } from "react";
 import logo from "../assets/logo.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../api/Axiosinstance";
 import toast from "react-hot-toast"
 
@@ -73,12 +73,12 @@ function Register() {
           {/* FIXED THIS PART */}
           <p className="text-center text-sm font-semibold text-gray-900 mt-4">
             Already have an account?{" "}
-            <span
+            <Link
+              to="/login"
               className="font-medium text-teal-600 hover:underline"
-              onClick={() => navigate("/login")}
             >
               Login Here
-            </span>
+            </Link>
           </p>
         </div>
       </div>

@@ -1,16 +1,47 @@
 import { Edit, Trash2, Plus } from "lucide-react";
+import axiosInstance from "../api/Axiosinstance";
+import { useEffect, useState } from "react";
 
 function ListNotes() {
+
+  const [notes, setNotes] = useState([]);
+
+  const loadNotes = async () => {
+    try {
+      const response = await axiosInstance.get("/notes");
+      console.log(response,"response")
+      setNotes(response.data);
+    } catch(err){
+      console.log("Error fetching notes",err)
+    }
+  }
+  useEffect(() => {
+    loadNotes();
+  }, [])
+
+  const handleDelete = async(id) => {
+    if (!window.confirm("Are you sure you want to delete this note")) return;
+   try {
+     await axiosInstance.delete(`/notes/${id}/`);
+     loadNotes();
+   } catch (err) {
+     console.log("Error deleting note:", err);
+   }
+  }
+  
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header with Add Button */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-800">My Notes</h1>
-          <button className="flex items-center space-x-2 px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-500 transition">
+          <a
+            href="/addNote"
+            className="flex items-center space-x-2 px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-500 transition"
+          >
             <Plus className="w-5 h-5" />
             <span>Add Note</span>
-          </button>
+          </a>
         </div>
 
         {/* Notes Table */}
@@ -34,86 +65,43 @@ function ListNotes() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {/* Sample Row 1 */}
-                <tr className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 text-sm text-gray-800">1</td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                    Sample Note Title
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    This is a sample note content...
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="flex justify-center space-x-3">
-                      <button
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                        title="Edit"
-                      >
-                        <Edit className="w-5 h-5" />
-                      </button>
-                      <button
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+                {notes.map((note, index) => (
+                  <tr key={note.id} className="hover:bg-gray-50 transition">
+                    <td className="px-6 py-4 text-sm text-gray-800">
+                      {index + 1}
+                    </td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                      {note.title}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      {note.content}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex justify-center space-x-3">
+                        <a
+                          href={`/editNote/${note.id}`}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                        >
+                          <Edit className="w-5 h-5" />
+                        </a>
+                        <button
+                          onClick={() => handleDelete(note.id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
 
-                {/* Sample Row 2 */}
-                <tr className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 text-sm text-gray-800">2</td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                    Another Note
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    Another sample content for demonstration...
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="flex justify-center space-x-3">
-                      <button
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                        title="Edit"
-                      >
-                        <Edit className="w-5 h-5" />
-                      </button>
-                      <button
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-
-                {/* Sample Row 3 */}
-                <tr className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 text-sm text-gray-800">3</td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                    Third Note
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    More sample content here...
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="flex justify-center space-x-3">
-                      <button
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                        title="Edit"
-                      >
-                        <Edit className="w-5 h-5" />
-                      </button>
-                      <button
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+                {notes.length === 0 && (
+                  <tr>
+                    <td colSpan="4" className="text-center py-6 text-gray-500">
+                      No notes found.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

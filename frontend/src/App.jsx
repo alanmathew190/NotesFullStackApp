@@ -7,6 +7,8 @@ import Login from './components/Login';
 import { Toaster } from "react-hot-toast";
 import Dashboard from './pages/Dashboard';
 import PageNotFound from './components/PageNotFound';
+import AddNote from './components/AddNote';
+import EditNote from './components/EditNote';
 
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<PageNotFound />} />
+        <Route path="/addNote" element={<AddNote />} />
+        <Route path="/editNote/:id" element={<EditNote />} />
       </Routes>
     </Router>
   );

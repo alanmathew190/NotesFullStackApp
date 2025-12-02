@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import PageNotFound from './components/PageNotFound';
 import AddNote from './components/AddNote';
 import EditNote from './components/EditNote';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 function App() {
@@ -19,10 +20,31 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<PageNotFound />} />
-        <Route path="/addNote" element={<AddNote />} />
-        <Route path="/editNote/:id" element={<EditNote />} />
+        <Route
+          path="/addNote"
+          element={
+            <ProtectedRoute>
+              <AddNote />{" "}
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/editNotes/:id"
+          element={
+            <ProtectedRoute>
+              <EditNote />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

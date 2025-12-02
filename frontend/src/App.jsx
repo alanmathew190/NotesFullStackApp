@@ -38,7 +38,7 @@ function App() {
           }
         />
         <Route
-          path="/editNotes/:id"
+          path="/editNote/:id"
           element={
             <ProtectedRoute>
               <EditNote />

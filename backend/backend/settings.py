@@ -63,6 +63,10 @@ REST_FRAMEWORK = {
     
     )
 }
+CORS_ALLOWED_ORIGINS = [
+    "https://notesfullstackapp-1.onrender.com/",
+]
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
